@@ -23,6 +23,14 @@ class Actor(db.Model):
     age = db.Column(db.String)
     gender = db.Column(db.String)
 
+    def format_actors(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "age": self.age,
+            "gender": self.gender
+        }
+
 '''
 @app.route('/movies/create', methods=['POST'])
 def create_movie():
@@ -44,30 +52,32 @@ def create_movie():
     else:
         abort(500)
 '''
-def shorten_actor(self):
-    return {
-        "name": self.name
-    }
 
-def shorten_movie(self):
-    return {
-        "title": self.title
-    }
+
+
 @app.route('/actors', methods=['GET'])
 def list_actors():
+    '''
+    actor = Actor(name="nayo", age="19", gender="female")
+    db.session.add(actor)
+    db.session.commit()
+    return render_template('home_page.html')
+    '''
     actors = Actor.query.all()
 
     if len(actors) == 0:
         abort(404)
 
-    short_list = [actor.shorten_actor() for actor in actors]
+    formatted_actors = [actor.format_actors() for actor in actors]
 
+    return render_template('actor_list.html', actors=formatted_actors)
+    '''
     return jsonify({
         "success": True,
-        "actors": short_list
+        "actors": formatted_actors
     })
-
-
+    '''
+    
 @app.route('/')
 def index():
     return render_template('home_page.html')
