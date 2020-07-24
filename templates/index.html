@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Casting Agency App</title>
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="form">
+            <input type="text" id="title" name="title" />
+            <input type="submit" value="Create" />
+        </form>
+        <div id="error" class="hidden">Something went wrong!</div>
+        <ul id="movies">
+            {% for d in data %}
+            <li>{{ d.title }}</li>
+            {% endfor %}
+        </ul>
+        <script>
+            //in html, form id = "form"
+            document.getElementById('form').onsubmit = function(e) {
+                e.preventDefault();
+                fetch('/movies/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        //id of text input is "title"
+                        'title': document.getElementById("title").value
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(function(response){
+                    return response.json();
+                }) 
+                .then(function(jsonResponse) {
+                    console.log(jsonResponse);
+                    //creates element of type LI (list item)
+                    const liItem = document.createElement('LI');
+                    liItem.innerHTML = jsonResponse['title'];
+                    //ul id
+                    document.getElementById('movies').appendChild(liItem);
+                    document.getElementById("error").className = 'hidden';
+                })
+                .catch(function() {
+                    document.getElementById("error").className = '';
+                })
+            }
+        </script>
+    </body>
+</html>
