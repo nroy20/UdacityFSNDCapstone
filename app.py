@@ -96,6 +96,20 @@ def list_movies():
     formatted_movies = [movie.format() for movie in movies]
 
     return render_template('movie_list.html', movies=formatted_movies)
+
+@app.route('/actors/<int:actor_id>', methods=["GET"])
+def get_actor_profile(actor_id):
+    if actor_id == 0:
+        abort(400)
+
+    actor = Actor.query.get(actor_id)
+    if not actor:
+        abort(404)
+
+    formatted_actor = actor.format()
+
+    return render_template('actor_profile.html', actor=formatted_actor)
+
     
 @app.route('/')
 def index():
