@@ -131,6 +131,35 @@ def add_actor():
     else:
         abort(500)
 
+@app.route('/movies/add', methods=["GET"])
+def create_movie_form():
+    return render_template('add_movie.html')
+@app.route('/movies/add', methods=["POST"])
+def add_movie():
+    error = False
+    body = request.get_json()
+    try:
+        title = body.get('title')
+        release_date = body.get('release_date')
+        movie = Movie(
+            title = title,
+            release_date = release_date
+        )
+        db.session.add(movie)
+        db.session.commit()
+    except:
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if not error:
+        return jsonify({
+            "title": body.get('title'),
+            "release_date": body.get('release_date')
+        })
+    else:
+        abort(500)
+
     
 @app.route('/')
 def index():
