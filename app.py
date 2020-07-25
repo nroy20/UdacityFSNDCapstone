@@ -13,7 +13,7 @@ class Movie(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
-    release_date = db.Column(db.DateTime)
+    release_date = db.Column(db.DateTime, nullable=False)
     
     def format(self):
         return {
