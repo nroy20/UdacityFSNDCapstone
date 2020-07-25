@@ -5,5 +5,17 @@
     <body>
         <h2>Age: {{actor.age}}</h2>
         <h2>Gender: {{actor.gender}}</h2>
+        <a href="/actors/{{ actor.id }}">
+            <button>Delete actor</button>
+        </a>
+        <a href="/actors/{{ actor.id }}">
+            <button>Modify actor details</button>
+        </a>
+        <a href="/actors">
+            <button>Back to actor list</button>
+        </a>
+        <a href="/">
+            <button>Back to home</button>
+        </a>
     </body>
 </html>
