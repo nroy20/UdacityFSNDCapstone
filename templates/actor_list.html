@@ -1,7 +1,11 @@
 <html>
     <ul>
         {% for actor in actors %}
-        <li>{{ actor.name }}</li>
+        <li>
+            <a href="/actors/{{ actor.id }}">
+                <h5>{{ actor.name }}</h5>
+            </a>
+        </li>
         {% endfor %}
     </ul>
 </html>
