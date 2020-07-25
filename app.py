@@ -121,7 +121,7 @@ def get_movie_description(movie_id):
 
     formatted_movie = movie.format()
 
-    return render_template('movie_profile.html', movie=formatted_movie)
+    return render_template('movie_description.html', movie=formatted_movie)
 
     
 @app.route('/')
