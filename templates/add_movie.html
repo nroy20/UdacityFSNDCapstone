@@ -1,7 +1,7 @@
 <html>
     <head>
-        <title>New Actor Form</title>
-        <h1>Add New Actor</h1>
+        <title>New Movie Form</title>
+        <h1>Add New Movie</h1>
         <style>
             .hidden {
                 display: none;
@@ -11,16 +11,12 @@
     <body>
         <form id="form">
             <h3>
-                Name:
-                <input type="text" id="name" name="name" />
+                Title:
+                <input type="text" id="title" name="title" />
             </h3>
             <h3>
-                Age:
-                <input type="text" id="age" name="age" />
-            </h3>
-            <h3>
-                Gender:
-                <input type="text" id="gender" name="gender" />
+                Release Date:
+                <input type="text" id="release_date" name="release date" />
             </h3>
             <input type="submit" value="Submit form" />
         </form>
@@ -28,12 +24,11 @@
         <script>
             document.getElementById('form').onsubmit = function(e) {
                 e.preventDefault();
-                fetch('/actors/add', {
+                fetch('/movies/add', {
                     method: 'POST',
                     body: JSON.stringify({
-                        'name': document.getElementById('name').value,
-                        'age': document.getElementById('age').value,
-                        'gender': document.getElementById('gender').value
+                        'title': document.getElementById('title').value,
+                        'release_date': document.getElementById('release_date').value
                     }),
                     headers: {
                         'Content-Type': 'application/json'
