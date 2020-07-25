@@ -129,7 +129,7 @@ def add_actor():
             "gender": body.get('gender')
         })
     else:
-        abort(500)
+        abort(422)
 
 @app.route('/movies/add', methods=["GET"])
 def create_movie_form():
@@ -158,7 +158,7 @@ def add_movie():
             "release_date": body.get('release_date')
         })
     else:
-        abort(500)
+        abort(422)
 
 @app.route('/actors/<int:actor_id>', methods=["DELETE"])
 def remove_actor(actor_id):
@@ -184,7 +184,7 @@ def remove_actor(actor_id):
             'success': True
         })
     else:
-        abort(500)
+        abort(422)
 
 @app.route('/movies/<int:movie_id>', methods=["DELETE"])
 def remove_movie(movie_id):
@@ -210,8 +210,50 @@ def remove_movie(movie_id):
             'success': True
         })
     else:
-        abort(500)
+        abort(422)
 
+@app.route('/actors/<int:actor_id>', methods=["PATCH"])
+def modify_actor(actor_id):
+    if (actor_id) == 0:
+        abort(400)
+
+    actor = Actor.query.get(actor_id)
+
+    if not actor:
+        abort(404)
+
+    body = request.get_json()
+
+    error = False
+    try:
+        name = body.get('name')
+        age = body.get('age')
+        gender = body.get('gender')
+
+        if name:
+            actor.name = name 
+        if age:
+            actor.age = age
+        if gender:
+            actor.gender = gender
+        db.session.commit()
+    except:
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if not error:
+        return jsonify({
+            "name": body.get('name'),
+            "age": body.get('age'),
+            "gender": body.get('gender')
+        })
+    else:
+        abort(422)
+
+
+
+        
     
 @app.route('/')
 def index():
