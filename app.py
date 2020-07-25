@@ -186,6 +186,31 @@ def remove_actor(actor_id):
     else:
         abort(500)
 
+@app.route('/movies/<int:movie_id>', methods=["DELETE"])
+def remove_movie(movie_id):
+    if movie_id == 0:
+      abort(400)
+
+    movie = Movie.query.get(movie_id)
+
+    if not movie:
+        abort(404)
+
+    error = False
+    try:
+        db.session.delete(movie)
+        db.session.commit()
+    except:
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if not error:
+        return jsonify({
+            'success': True
+        })
+    else:
+        abort(500)
 
     
 @app.route('/')

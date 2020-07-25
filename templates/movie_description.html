@@ -1,12 +1,16 @@
 <html>
-    <header>
+    <head>
         <h1>Movie Description: {{movie.title}}</h1>
-    </header>
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
     <body>
         <h2>Release Date: {{movie.release_date}}</h2>
-        <a href="/movies/{{ movie.id }}">
-            <button>Delete movie</button>
-        </a>
+        <button class="delete-button" data-id="{{ movie.id }}">Delete movie</button>
+
         <a href="/movies/{{ movie.id }}">
             <button>Modify movie details</button>
         </a>
@@ -17,4 +21,21 @@
             <button>Back to home</button>
         </a>
     </body>
+    <div id="error" class="hidden">Something went wrong!</div>
+    <script>
+        const button = document.querySelector('.delete-button');
+        button.onclick = function(e) {
+            const deleteId = e.target.dataset['id'];
+            fetch('/movies/' + deleteId, {
+                method: 'DELETE'
+            })
+            .then(function() {
+                    document.getElementById("error").className = 'hidden';
+                })
+            .catch(function(e) {
+                    console.log(e)
+                    document.getElementById("error").className = '';
+            })
+        }
+    </script>
 </html>
