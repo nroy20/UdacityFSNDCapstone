@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
+from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
@@ -100,9 +100,10 @@ def get_movie_description(movie_id):
     return render_template('movie_description.html', movie=formatted_movie)
 
 @app.route('/actors/add', methods=["GET"])
+def create_actor_form():
     return render_template('add_actor.html')
 @app.route('/actors/add', methods=["POST"])
-def add_actor:
+def add_actor():
     error = False
     body = request.get_json()
     try:
@@ -117,14 +118,16 @@ def add_actor:
         db.session.add(actor)
         db.session.commit()
     except:
-        flash('An error occured, actor was not listed')
         error = True
         db.session.rollback()
     finally:
         db.session.close()
     if not error:
-        flash('New actor was successfully listed!')
-        return render_template('home_page.html')
+        return jsonify({
+            "name": body.get('name'),
+            "age": body.get('age'),
+            "gender": body.get('gender')
+        })
     else:
         abort(500)
 
@@ -132,5 +135,4 @@ def add_actor:
 @app.route('/')
 def index():
     return render_template('home_page.html')
-    #return render_template('index.html', data=Movie.query.all())
 

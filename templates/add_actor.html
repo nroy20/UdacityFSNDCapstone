@@ -1,6 +1,7 @@
 <html>
     <head>
-        <title>Casting Agency App</title>
+        <title>New Actor Form</title>
+        <h1>Add New Actor</h1>
         <style>
             .hidden {
                 display: none;
@@ -9,37 +10,45 @@
     </head>
     <body>
         <form id="form">
-            <input type="text" id="title" name="title" />
-            <input type="submit" value="Create" />
+            <h3>
+                Name:
+                <input type="text" id="name" name="name" />
+            </h3>
+            <h3>
+                Age:
+                <input type="text" id="age" name="age" />
+            </h3>
+            <h3>
+                Gender:
+                <input type="text" id="gender" name="gender" />
+            </h3>
+            <input type="submit" value="Submit form" />
         </form>
         <div id="error" class="hidden">Something went wrong!</div>
         <script>
-            //in html, form id = "form"
             document.getElementById('form').onsubmit = function(e) {
                 e.preventDefault();
-                fetch('/movies/create', {
+                fetch('/actors/add', {
                     method: 'POST',
                     body: JSON.stringify({
-                        //id of text input is "title"
-                        'title': document.getElementById("title").value
+                        'name': document.getElementById('name').value,
+                        'age': document.getElementById('age').value,
+                        'gender': document.getElementById('gender').value
                     }),
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 })
                 .then(function(response){
-                    return response.json();
+                    console.log("blobby");
+                    return response.text();
                 }) 
                 .then(function(jsonResponse) {
                     console.log(jsonResponse);
-                    //creates element of type LI (list item)
-                    const liItem = document.createElement('LI');
-                    liItem.innerHTML = jsonResponse['title'];
-                    //ul id
-                    document.getElementById('movies').appendChild(liItem);
                     document.getElementById("error").className = 'hidden';
                 })
-                .catch(function() {
+                .catch(function(e) {
+                    console.log(e)
                     document.getElementById("error").className = '';
                 })
             }
