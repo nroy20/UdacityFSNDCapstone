@@ -110,6 +110,19 @@ def get_actor_profile(actor_id):
 
     return render_template('actor_profile.html', actor=formatted_actor)
 
+@app.route('/movies/<int:movie_id>', methods=["GET"])
+def get_movie_description(movie_id):
+    if movie_id == 0:
+        abort(400)
+
+    movie = Movie.query.get(movie_id)
+    if not movie:
+        abort(404)
+
+    formatted_movie = movie.format()
+
+    return render_template('movie_profile.html', movie=formatted_movie)
+
     
 @app.route('/')
 def index():
