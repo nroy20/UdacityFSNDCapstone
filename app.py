@@ -13,7 +13,15 @@ class Movie(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
-    release_date = db.Column(db.DateTime, nullable=False)
+    release_date = db.Column(db.DateTime)
+    
+    def format(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "release_date": self.release_date
+        }
+
 
 class Actor(db.Model):
     __tablename__ = 'actors'
@@ -23,7 +31,7 @@ class Actor(db.Model):
     age = db.Column(db.String)
     gender = db.Column(db.String)
 
-    def format_actors(self):
+    def format(self):
         return {
             "id": self.id,
             "name": self.name,
@@ -68,15 +76,26 @@ def list_actors():
     if len(actors) == 0:
         abort(404)
 
-    formatted_actors = [actor.format_actors() for actor in actors]
+    formatted_actors = [actor.format() for actor in actors]
 
     return render_template('actor_list.html', actors=formatted_actors)
+
+@app.route('/movies', methods=['GET'])
+def list_movies():
     '''
-    return jsonify({
-        "success": True,
-        "actors": formatted_actors
-    })
+    movie = Movie(title="movie1")
+    db.session.add(movie)
+    db.session.commit()
+    return render_template('home_page.html')
     '''
+    movies = Movie.query.all()
+
+    if len(movies) == 0:
+        abort(404)
+
+    formatted_movies = [movie.format() for movie in movies]
+
+    return render_template('movie_list.html', movies=formatted_movies)
     
 @app.route('/')
 def index():
