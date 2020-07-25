@@ -160,6 +160,31 @@ def add_movie():
     else:
         abort(500)
 
+@app.route('/actors/<int:actor_id>', methods=["DELETE"])
+def remove_actor(actor_id):
+    if actor_id == 0:
+      abort(400)
+
+    actor = Actor.query.get(actor_id)
+
+    if not actor:
+        abort(404)
+
+    error = False
+    try:
+        db.session.delete(actor)
+        db.session.commit()
+    except:
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if not error:
+        return jsonify({
+            'success': True
+        })
+    else:
+        abort(500)
 
 
     

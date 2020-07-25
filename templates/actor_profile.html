@@ -1,16 +1,17 @@
 <html>
-    <header>
+    <head>
         <h1>Actor Profile: {{actor.name}}</h1>
-    </header>
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
     <body>
         <h2>Age: {{actor.age}}</h2>
         <h2>Gender: {{actor.gender}}</h2>
-        <a href="/actors/{{ actor.id }}">
-            <button>Delete actor</button>
-        </a>
-        <a href="/actors/{{ actor.id }}">
-            <button>Modify actor details</button>
-        </a>
+        <button class="delete-button" data-id="{{ actor.id }}">Delete actor</button>
+        <button id="update">Modify actor details</button>
         <a href="/actors">
             <button>Back to actor list</button>
         </a>
@@ -18,4 +19,21 @@
             <button>Back to home</button>
         </a>
     </body>
+    <div id="error" class="hidden">Something went wrong!</div>
+    <script>
+        const button = document.querySelector('.delete-button');
+        button.onclick = function(e) {
+            const deleteId = e.target.dataset['id'];
+            fetch('/actors/' + deleteId, {
+                method: 'DELETE'
+            })
+            .then(function() {
+                    document.getElementById("error").className = 'hidden';
+                })
+            .catch(function(e) {
+                    console.log(e)
+                    document.getElementById("error").className = '';
+            })
+        }
+    </script>
 </html>
