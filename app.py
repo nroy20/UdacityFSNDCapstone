@@ -39,30 +39,6 @@ class Actor(db.Model):
             "gender": self.gender
         }
 
-'''
-@app.route('/movies/create', methods=['POST'])
-def create_movie():
-    error = False
-    body = {}
-    try:
-        title = request.get_json()['title']
-        movie = Movie(title=title)
-        db.session.add(movie)
-        db.session.commit()
-        body['title'] = movie.title
-    except:
-        error = True
-        db.session.rollback()
-    finally:
-        db.session.close()
-    if not error:
-        return jsonify(body) 
-    else:
-        abort(500)
-'''
-
-
-
 @app.route('/actors', methods=['GET'])
 def list_actors():
     '''
@@ -122,6 +98,35 @@ def get_movie_description(movie_id):
     formatted_movie = movie.format()
 
     return render_template('movie_description.html', movie=formatted_movie)
+
+@app.route('/actors/add', methods=["GET"])
+    return render_template('add_actor.html')
+@app.route('/actors/add', methods=["POST"])
+def add_actor:
+    error = False
+    body = request.get_json()
+    try:
+        name = body.get('name')
+        age = body.get('age')
+        gender = body.get('gender')
+        actor = Actor(
+            name = name,
+            age = age,
+            gender = gender
+        )
+        db.session.add(actor)
+        db.session.commit()
+    except:
+        flash('An error occured, actor was not listed')
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if not error:
+        flash('New actor was successfully listed!')
+        return render_template('home_page.html')
+    else:
+        abort(500)
 
     
 @app.route('/')
