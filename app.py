@@ -212,7 +212,10 @@ def remove_movie(movie_id):
     else:
         abort(422)
 
-@app.route('/actors/<int:actor_id>', methods=["PATCH"])
+@app.route('/actors/<int:actor_id>/edit', methods=["GET"])
+def modify_actor_form(actor_id):
+    return render_template('update_actor.html', actor_id=actor_id)
+@app.route('/actors/<int:actor_id>/edit', methods=["PATCH"])
 def modify_actor(actor_id):
     if (actor_id) == 0:
         abort(400)
@@ -250,10 +253,6 @@ def modify_actor(actor_id):
         })
     else:
         abort(422)
-
-
-
-        
     
 @app.route('/')
 def index():

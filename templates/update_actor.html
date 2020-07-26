@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Actor Form</title>
-        <h1>Add New Actor</h1>
+        <h1>Modify Actor Details</h1>
         <style>
             .hidden {
                 display: none;
@@ -9,7 +9,7 @@
         </style>
     </head>
     <body>
-        <form id="form">
+        <form id="form" data-id="{{ actor_id }}">
             <h3>
                 Name:
                 <input type="text" id="name" name="name" />
@@ -22,14 +22,15 @@
                 Gender:
                 <input type="text" id="gender" name="gender" />
             </h3>
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Update" />
         </form>
         <div id="error" class="hidden">Something went wrong!</div>
         <script>
             document.getElementById('form').onsubmit = function(e) {
                 e.preventDefault();
-                fetch('/actors/add', {
-                    method: 'POST',
+                const updateId = e.target.dataset['id'];
+                fetch('/actors/' + updateId + '/edit', {
+                    method: 'PATCH',
                     body: JSON.stringify({
                         'name': document.getElementById('name').value,
                         'age': document.getElementById('age').value,
