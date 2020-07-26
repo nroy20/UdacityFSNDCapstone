@@ -41,13 +41,7 @@ class Actor(db.Model):
 
 @app.route('/actors', methods=['GET'])
 def list_actors():
-    '''
-    actor = Actor(name="nayo", age="19", gender="female")
-    db.session.add(actor)
-    db.session.commit()
-    return render_template('home_page.html')
-    '''
-    actors = Actor.query.all()
+    actors = Actor.query.order_by('id').all()
 
     if len(actors) == 0:
         abort(404)
@@ -58,13 +52,7 @@ def list_actors():
 
 @app.route('/movies', methods=['GET'])
 def list_movies():
-    '''
-    movie = Movie(title="movie1")
-    db.session.add(movie)
-    db.session.commit()
-    return render_template('home_page.html')
-    '''
-    movies = Movie.query.all()
+    movies = Movie.query.order_by('id').all()
 
     if len(movies) == 0:
         abort(404)
@@ -254,6 +242,43 @@ def modify_actor(actor_id):
     else:
         abort(422)
     
+@app.route('/movies/<int:movie_id>/edit', methods=["GET"])
+def modify_movie_form(movie_id):
+    return render_template('update_movie.html', movie_id=movie_id)
+@app.route('/movies/<int:movie_id>/edit', methods=["PATCH"])
+def modify_movie(movie_id):
+    if (movie_id) == 0:
+        abort(400)
+
+    movie = Movie.query.get(movie_id)
+
+    if not movie:
+        abort(404)
+
+    body = request.get_json()
+
+    error = False
+    try:
+        title = body.get('title')
+        release_date = body.get('release_date')
+
+        if title:
+            movie.title = title 
+        if release_date:
+            movie.release_date = release_date
+        db.session.commit()
+    except:
+        error = True
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if not error:
+        return jsonify({
+            "title": body.get('title'),
+            "release_date": body.get('release_date'),
+        })
+    else:
+        abort(422)
 @app.route('/')
 def index():
     return render_template('home_page.html')
