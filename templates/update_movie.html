@@ -1,7 +1,7 @@
 <html>
     <head>
-        <title>New Movie Form</title>
-        <h1>Add New Movie</h1>
+        <title>Movie Form</title>
+        <h1>Modify Movie Details</h1>
         <style>
             .hidden {
                 display: none;
@@ -9,7 +9,7 @@
         </style>
     </head>
     <body>
-        <form id="form">
+        <form id="form" data-id="{{ movie_id }}">
             <h3>
                 Title:
                 <input type="text" id="title" name="title" />
@@ -18,14 +18,15 @@
                 Release Date:
                 <input type="date" id="release_date" name="release date" />
             </h3>
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Update" />
         </form>
         <div id="error" class="hidden">Something went wrong!</div>
         <script>
             document.getElementById('form').onsubmit = function(e) {
                 e.preventDefault();
-                fetch('/movies/add', {
-                    method: 'POST',
+                const updateId = e.target.dataset['id'];
+                fetch('/movies/' + updateId + '/edit', {
+                    method: 'PATCH',
                     body: JSON.stringify({
                         'title': document.getElementById('title').value,
                         'release_date': document.getElementById('release_date').value
