@@ -11,12 +11,11 @@
         <h2>Age: {{actor.age}}</h2>
         <h2>Gender: {{actor.gender}}</h2>
 
-        <button class="delete-button" data-id="{{ actor.id }}">Delete actor</button>
-        
         <a href="/actors/{{ actor.id }}/edit">
             <button>Modify actor details</button>
         </a>
         <a href="/actors">
+            <button class="delete-button" data-id="{{ actor.id }}">Delete actor</button>
             <button>Back to actor list</button>
         </a>
         <a href="/">

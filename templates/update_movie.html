@@ -18,12 +18,15 @@
                 Release Date:
                 <input type="date" id="release_date" name="release date" />
             </h3>
-            <input type="submit" value="Update" />
         </form>
+        <a href='/movies'>
+            <button class="submit" data-id="{{ movie_id }}">Update</button>
+            <button>Back to movie list</button>
+        </a>
         <div id="error" class="hidden">Something went wrong!</div>
         <script>
-            document.getElementById('form').onsubmit = function(e) {
-                e.preventDefault();
+            const button = document.querySelector('.submit');
+            button.onclick = function(e) {
                 const updateId = e.target.dataset['id'];
                 fetch('/movies/' + updateId + '/edit', {
                     method: 'PATCH',

@@ -9,7 +9,7 @@
         </style>
     </head>
     <body>
-        <form id="form" data-id="{{ actor_id }}">
+        <form id="form">
             <h3>
                 Name:
                 <input type="text" id="name" name="name" />
@@ -22,12 +22,15 @@
                 Gender:
                 <input type="text" id="gender" name="gender" />
             </h3>
-            <input type="submit" value="Update" />
         </form>
+        <a href='/actors'>
+            <button class="submit" data-id="{{ actor_id }}">Update</button>
+            <button>Back to actor list</button>
+        </a>
         <div id="error" class="hidden">Something went wrong!</div>
         <script>
-            document.getElementById('form').onsubmit = function(e) {
-                e.preventDefault();
+            const button = document.querySelector('.submit');
+            button.onclick = function(e) {
                 const updateId = e.target.dataset['id'];
                 fetch('/actors/' + updateId + '/edit', {
                     method: 'PATCH',

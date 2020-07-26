@@ -9,12 +9,11 @@
     </head>
     <body>
         <h2>Release Date: {{movie.release_date}}</h2>
-        <button class="delete-button" data-id="{{ movie.id }}">Delete movie</button>
-
         <a href="/movies/{{ movie.id }}/edit">
             <button>Modify movie details</button>
         </a>
         <a href="/movies">
+            <button class="delete-button" data-id="{{ movie.id }}">Delete movie</button>
             <button>Back to movie list</button>
         </a>
         <a href="/">
@@ -30,11 +29,11 @@
                 method: 'DELETE'
             })
             .then(function() {
-                    document.getElementById("error").className = 'hidden';
-                })
+                document.getElementById("error").className = 'hidden';
+            })
             .catch(function(e) {
-                    console.log(e)
-                    document.getElementById("error").className = '';
+                console.log(e)
+                document.getElementById("error").className = '';
             })
         }
     </script>

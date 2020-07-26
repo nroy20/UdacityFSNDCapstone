@@ -18,12 +18,17 @@
                 Release Date:
                 <input type="date" id="release_date" name="release date" />
             </h3>
-            <input type="submit" value="Submit" />
         </form>
+        <a href='/movies'>
+            <button class="submit" data-id="{{ movie_id }}">Submit</button>
+        </a>
+        <a href='/'>
+            <button>Back to home</button>
+        </a>
         <div id="error" class="hidden">Something went wrong!</div>
         <script>
-            document.getElementById('form').onsubmit = function(e) {
-                e.preventDefault();
+            const button = document.querySelector('.submit');
+            button.onclick = function(e) {
                 fetch('/movies/add', {
                     method: 'POST',
                     body: JSON.stringify({

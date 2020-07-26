@@ -1,4 +1,15 @@
 <html>
+    <script>
+        window.onload = function() {
+            if(!window.location.hash) {
+                window.location = window.location + '#loaded';
+                window.location.reload();
+            }
+        }
+    </script>
+    <a href='/'>
+        <button>Back to home</button>
+    </a>
     <ul>
         {% for actor in actors %}
         <li>

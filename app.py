@@ -279,7 +279,7 @@ def modify_movie(movie_id):
         })
     else:
         abort(422)
-        
+
 @app.route('/')
 def index():
     return render_template('home_page.html')
