@@ -1,17 +1,26 @@
 <html>
     <head>
         <title>My Capstone Project</title>
+        <link rel="stylesheet" type="text/css" href="../stylesheets/home_page.css"/>
+        <h1>Casting Organizer</h1>
     </head>
-    <a href="/actors">
-        <button>List actors</button>
-    </a>
-    <a href="/movies">
-        <button>List movies</button>
-    </a>
-    <a href="/actors/add">
-        <button>Add actor</button>
-    </a>
-    <a href="/movies/add">
-        <button>Add movie</button>
-    </a>
+    <body>
+        <a href="https://my-casting-agency-capstone.us.auth0.com/authorize?audience=casting&response_type=token&client_id=nF61ybvchhjB0CfFWWJqPKViYd6DLJ1N&redirect_uri=https://localhost:8080/login-results">
+            <button>Log in</button>
+        </a>
+        <div id="buttons">
+            <a href="/actors">
+                <button id="b1">List actors</button>
+            </a>
+            <a href="/movies">
+                <button id="b2">List movies</button>
+            </a>
+            <a href="/actors/add">
+                <button id="b3">Add actor</button>
+            </a>
+            <a href="/movies/add">
+                <button id="b4">Add movie</button>
+            </a>
+        </div>
+    </body>
 </html>

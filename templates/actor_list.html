@@ -1,4 +1,9 @@
 <html>
+    <head>
+        <title>My Capstone Project</title>
+        <link rel="stylesheet" type="text/css" href="../stylesheets/templist.css"/>
+        <h1>Casting Organizer</h1>
+    </head>
     <script>
         window.onload = function() {
             if(!window.location.hash) {
@@ -7,16 +12,18 @@
             }
         }
     </script>
-    <a href='/'>
-        <button>Back to home</button>
-    </a>
-    <ul>
-        {% for actor in actors %}
-        <li>
-            <a href="/actors/{{ actor.id }}">
-                <h5>{{actor.name}}</h5>
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
+    <body>
+        <a href='/'>
+            <button id="home-button">Back to home</button>
+        </a>
+        <ul>
+            {% for actor in actors %}
+            <li>
+                <a href="/actors/{{ actor.id }}">
+                    <h5>{{actor.name}}</h5>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </body>
 </html>

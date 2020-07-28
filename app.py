@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from auth import AuthError, requires_auth
 
-app = Flask(__name__)
+
+app = Flask(__name__, static_folder="templates/stylesheets")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:temppass@localhost:5432/capstone'
 db = SQLAlchemy(app)
-
+#, static_folder="templates/stylesheets"
 migrate = Migrate(app, db)
 
 class Movie(db.Model):
@@ -39,8 +41,16 @@ class Actor(db.Model):
             "gender": self.gender
         }
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, true')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, DELETE, PATCH')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
 @app.route('/actors', methods=['GET'])
-def list_actors():
+@requires_auth('get:information')
+def list_actors(payload):
     actors = Actor.query.order_by('id').all()
 
     if len(actors) == 0:
@@ -51,7 +61,8 @@ def list_actors():
     return render_template('actor_list.html', actors=formatted_actors)
 
 @app.route('/movies', methods=['GET'])
-def list_movies():
+@requires_auth('get:information')
+def list_movies(payload):
     movies = Movie.query.order_by('id').all()
 
     if len(movies) == 0:
@@ -62,7 +73,8 @@ def list_movies():
     return render_template('movie_list.html', movies=formatted_movies)
 
 @app.route('/actors/<int:actor_id>', methods=["GET"])
-def get_actor_profile(actor_id):
+@requires_auth('get:information')
+def get_actor_profile(actor_id, payload):
     if actor_id == 0:
         abort(400)
 
@@ -75,7 +87,8 @@ def get_actor_profile(actor_id):
     return render_template('actor_profile.html', actor=formatted_actor)
 
 @app.route('/movies/<int:movie_id>', methods=["GET"])
-def get_movie_description(movie_id):
+@requires_auth('get:information')
+def get_movie_description(movie_id, payload):
     if movie_id == 0:
         abort(400)
 
@@ -88,10 +101,12 @@ def get_movie_description(movie_id):
     return render_template('movie_description.html', movie=formatted_movie)
 
 @app.route('/actors/add', methods=["GET"])
-def create_actor_form():
+@requires_auth('post:actor')
+def create_actor_form(payload):
     return render_template('add_actor.html')
 @app.route('/actors/add', methods=["POST"])
-def add_actor():
+@requires_auth('post:actor')
+def add_actor(payload):
     error = False
     body = request.get_json()
     try:
@@ -120,10 +135,12 @@ def add_actor():
         abort(422)
 
 @app.route('/movies/add', methods=["GET"])
-def create_movie_form():
+@requires_auth('post:movie')
+def create_movie_form(payload):
     return render_template('add_movie.html')
 @app.route('/movies/add', methods=["POST"])
-def add_movie():
+@requires_auth('post:movie')
+def add_movie(payload):
     error = False
     body = request.get_json()
     try:
@@ -149,7 +166,8 @@ def add_movie():
         abort(422)
 
 @app.route('/actors/<int:actor_id>', methods=["DELETE"])
-def remove_actor(actor_id):
+@requires_auth('delete:actor')
+def remove_actor(actor_id, payload):
     if actor_id == 0:
       abort(400)
 
@@ -158,7 +176,7 @@ def remove_actor(actor_id):
     if not actor:
         abort(404)
 
-    error = False
+    error = False 
     try:
         db.session.delete(actor)
         db.session.commit()
@@ -175,7 +193,8 @@ def remove_actor(actor_id):
         abort(422)
 
 @app.route('/movies/<int:movie_id>', methods=["DELETE"])
-def remove_movie(movie_id):
+@requires_auth('delete:movie')
+def remove_movie(movie_id, payload):
     if movie_id == 0:
       abort(400)
 
@@ -201,10 +220,12 @@ def remove_movie(movie_id):
         abort(422)
 
 @app.route('/actors/<int:actor_id>/edit', methods=["GET"])
-def modify_actor_form(actor_id):
+@requires_auth('patch:information')
+def modify_actor_form(actor_id, payload):
     return render_template('update_actor.html', actor_id=actor_id)
 @app.route('/actors/<int:actor_id>/edit', methods=["PATCH"])
-def modify_actor(actor_id):
+@requires_auth('patch:information')
+def modify_actor(actor_id, payload):
     if (actor_id) == 0:
         abort(400)
 
@@ -243,10 +264,12 @@ def modify_actor(actor_id):
         abort(422)
     
 @app.route('/movies/<int:movie_id>/edit', methods=["GET"])
-def modify_movie_form(movie_id):
+@requires_auth('patch:information')
+def modify_movie_form(movie_id, payload):
     return render_template('update_movie.html', movie_id=movie_id)
 @app.route('/movies/<int:movie_id>/edit', methods=["PATCH"])
-def modify_movie(movie_id):
+@requires_auth('patch:information')
+def modify_movie(movie_id, payload):
     if (movie_id) == 0:
         abort(400)
 
@@ -279,8 +302,42 @@ def modify_movie(movie_id):
         })
     else:
         abort(422)
-
 @app.route('/')
 def index():
     return render_template('home_page.html')
 
+
+@app.errorhandler(422)
+def unprocessable(error):
+    return jsonify({
+                    "success": False, 
+                    "error": 422,
+                    "message": "unprocessable"
+                    }), 422
+
+@app.errorhandler(404)
+def resource_not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "resource not found"
+    }), 404
+
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "bad request"
+    }), 400
+
+
+'''
+@TODO implement error handler for AuthError
+    error handler should conform to general task above 
+'''
+@app.errorhandler(AuthError)
+def error_auth(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return response
