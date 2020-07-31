@@ -1,14 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, flash
+from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_cors import CORS
 from auth import AuthError, requires_auth
+from functools import wraps
+import json
+import os
 
 
-app = Flask(__name__, static_folder="templates/stylesheets")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:temppass@localhost:5432/capstone'
-db = SQLAlchemy(app)
-#, static_folder="templates/stylesheets"
-migrate = Migrate(app, db)
+db = SQLAlchemy()
+
+def create_app(test_config=None):
+    app = Flask(__name__, static_folder="templates/stylesheets")
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:temppass@localhost:5432/capstone'
+    migrate = Migrate(app, db)
+    db.app = app
+
+app = create_app()
+app.secret_key = os.getenv("super secret key")
 
 class Movie(db.Model):
     __tablename__ = 'movies'
@@ -74,7 +83,7 @@ def list_movies(payload):
 
 @app.route('/actors/<int:actor_id>', methods=["GET"])
 @requires_auth('get:information')
-def get_actor_profile(actor_id, payload):
+def get_actor_profile(payload, actor_id):
     if actor_id == 0:
         abort(400)
 
@@ -88,7 +97,7 @@ def get_actor_profile(actor_id, payload):
 
 @app.route('/movies/<int:movie_id>', methods=["GET"])
 @requires_auth('get:information')
-def get_movie_description(movie_id, payload):
+def get_movie_description(payload, movie_id,):
     if movie_id == 0:
         abort(400)
 
@@ -167,7 +176,7 @@ def add_movie(payload):
 
 @app.route('/actors/<int:actor_id>', methods=["DELETE"])
 @requires_auth('delete:actor')
-def remove_actor(actor_id, payload):
+def remove_actor(payload, actor_id):
     if actor_id == 0:
       abort(400)
 
@@ -194,7 +203,7 @@ def remove_actor(actor_id, payload):
 
 @app.route('/movies/<int:movie_id>', methods=["DELETE"])
 @requires_auth('delete:movie')
-def remove_movie(movie_id, payload):
+def remove_movie(payload, movie_id):
     if movie_id == 0:
       abort(400)
 
@@ -221,11 +230,11 @@ def remove_movie(movie_id, payload):
 
 @app.route('/actors/<int:actor_id>/edit', methods=["GET"])
 @requires_auth('patch:information')
-def modify_actor_form(actor_id, payload):
+def modify_actor_form(payload, actor_id):
     return render_template('update_actor.html', actor_id=actor_id)
 @app.route('/actors/<int:actor_id>/edit', methods=["PATCH"])
 @requires_auth('patch:information')
-def modify_actor(actor_id, payload):
+def modify_actor(payload, actor_id):
     if (actor_id) == 0:
         abort(400)
 
@@ -265,11 +274,11 @@ def modify_actor(actor_id, payload):
     
 @app.route('/movies/<int:movie_id>/edit', methods=["GET"])
 @requires_auth('patch:information')
-def modify_movie_form(movie_id, payload):
+def modify_movie_form(payload, movie_id):
     return render_template('update_movie.html', movie_id=movie_id)
 @app.route('/movies/<int:movie_id>/edit', methods=["PATCH"])
 @requires_auth('patch:information')
-def modify_movie(movie_id, payload):
+def modify_movie(payload, movie_id):
     if (movie_id) == 0:
         abort(400)
 
