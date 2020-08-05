@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, session
+from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, session, make_response
 from flask_cors import CORS
 from auth import AuthError, requires_auth
 from functools import wraps
