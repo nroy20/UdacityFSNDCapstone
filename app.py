@@ -272,9 +272,9 @@ def create_app(test_config=None):
 
     @app.route('/login-results', methods=['GET'])
     def set_token():
-        return jsonify({
-            "success": True
-        })
+        body = request.get_json()
+        token = body.get('token')
+        return render_template('home_page.html', token), 200
 
     @app.route('/')
     def index():

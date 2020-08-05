@@ -3,7 +3,24 @@
         <title>My Capstone Project</title>
         <link rel="stylesheet" type="text/css" href="../stylesheets/home_page.css"/>
         <h1>Casting Organizer</h1>
+        <h1>{{ token }}</h1>
     </head>
+    <script>
+        window.onload = function() {
+            if(window.location.hash) {
+                var token = location.hash.substr(1);
+                fetch('/login-results', {
+                    method: 'GET',
+                    body: JSON.stringify({
+                        'token': token
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            }
+        }
+    </script>
     <body>
         <a href="https://my-casting-agency-capstone.us.auth0.com/authorize?audience=casting&response_type=token&client_id=tBzEjpeO5w5XC6P2RtO3AGdW5N4ydlN1&redirect_uri=https://udacity-fsnd-capstone-v1.herokuapp.com/login-results"> 
             <button>Log in</button>
