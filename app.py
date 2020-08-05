@@ -269,10 +269,11 @@ def create_app(test_config=None):
 
         except:
             abort(422)
-
+    '''
     @app.route('/login-results', methods=['GET'])
     def login_page():
         return render_template('home_page.html'), 200
+    '''
     @app.route('/login-results', methods=['POST'])
     def get_token():
         body = request.get_json()
