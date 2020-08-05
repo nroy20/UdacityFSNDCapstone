@@ -271,7 +271,7 @@ def create_app(test_config=None):
             abort(422)
 
     @app.route('/login-results', methods=['GET'])
-    def set_token(token):
+    def set_token():
         return jsonify({
             "success": True
         })
