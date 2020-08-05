@@ -270,11 +270,8 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-    @app.route('/login-results#access_token=<string:token>&expires_in=7200&token_type=Bearer', methods=['GET'])
+    @app.route('/login-results', methods=['GET'])
     def set_token(token):
-        token_var = token
-        if token_var == 'abc':
-            abort(407)
         return jsonify({
             "success": True
         })
