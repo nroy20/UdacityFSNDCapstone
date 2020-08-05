@@ -276,11 +276,18 @@ def create_app(test_config=None):
     @app.route('/login-results', methods=['POST'])
     def get_token():
         body = request.get_json()
-        token = body.get('hash')
+        hash = body.get('hash')
+        #TODO: split hash to get token, then shove token into header
+        token_end_index = len(hash) - 32
+        token = hash[12:token_end_index]
+        request.headers['Authorization'] = token
         if not token:
             abort(404)
+        if request.headers['Authorization'] != token:
+            abort(400)
         return jsonify({
-            "success": True,
+            "success": True
+            "hash": hash
             "token": token
         })
 
