@@ -3,8 +3,7 @@ from sqlalchemy import Column, String, Integer, DateTime
 from flask_migrate import Migrate
 
 
-database_name = "capstone"
-database_path = "postgresql://postgres:temppass@localhost:5432/capstone"
+database_path = "postgres://yrpssbmdhpbpcf:3e72289a2991b9c8a380f9d67c92611c59884f7e18dbfaede4554a67fb8aa6a3@ec2-34-195-115-225.compute-1.amazonaws.com:5432/d6flpqcu2sgugl"
 
 db = SQLAlchemy()
 
