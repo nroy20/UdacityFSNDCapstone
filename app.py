@@ -276,9 +276,9 @@ def create_app(test_config=None):
     @app.route('/login-results', methods=['POST'])
     def get_token():
         body = request.get_json()
-        token = body.get('token')
+        token = body.get('hash')
         if not token:
-            return render_template('home_page.html', token="404"), 404
+            abort(404)
         return jsonify({
             "success": True,
             "token": token
