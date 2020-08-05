@@ -6,6 +6,8 @@ from models import Actor, Movie, setup_db
 import json
 import os
 
+token_var = "abc"
+
 def create_app(test_config=None):
     app = Flask(__name__, static_folder="templates/stylesheets")
     setup_db(app)
@@ -267,6 +269,15 @@ def create_app(test_config=None):
 
         except:
             abort(422)
+
+    @app.route('/login-results#access_token=<string:token>&expires_in=7200&token_type=Bearer', methods=['GET'])
+    def set_token(token):
+        token_var = token
+        if token_var == 'abc':
+            abort(407)
+        return jsonify({
+            "success": True
+        })
 
     @app.route('/')
     def index():
