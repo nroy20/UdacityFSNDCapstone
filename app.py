@@ -270,14 +270,17 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-    @app.route('/login-results', methods=['GET', 'POST'])
-    def set_token():
-        #body = request.get_json()
-        #token = body.get('token')
+    @app.route('/login-results', methods=['GET'])
+    def login_page():
+        return render_template('home_page.html'), 200
+    @app.route('/login-results', methods=['POST'])
         if request.method == 'POST':
             body = request.get_json()
             token = body.get('token')
-            return render_template('home_page.html', token=token), 200
+            return jsonify({
+                "success": True
+            })
+            #return render_template('home_page.html', token=token), 200
         else:
             return jsonify({
                 "success": False
