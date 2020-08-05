@@ -279,7 +279,7 @@ def create_app(test_config=None):
         token = body.get('token')
         if not token:
             return render_template('home_page.html', token="404"), 404
-        return render_template('home_page.html', token=token), 200
+        return render_template('home_page.html', token="yay"), 200
 
     @app.route('/')
     def index():
