@@ -286,8 +286,8 @@ def create_app(test_config=None):
         if request.headers['Authorization'] != token:
             abort(400)
         return jsonify({
-            "success": True
-            "hash": hash
+            "success": True,
+            "hash": hash,
             "token": token
         })
 
