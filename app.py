@@ -5,6 +5,7 @@ from functools import wraps
 from models import Actor, Movie, setup_db
 import json
 import os
+import requests
 
 token_var = "abc"
 
@@ -278,11 +279,13 @@ def create_app(test_config=None):
         body = request.get_json()
         hash = body.get('hash')
         #TODO: split hash to get token, then shove token into header
-        token_end_index = len(hash) - 32
-        token = hash[12:token_end_index]
+        token_end_index = len(hash) - 34
+        token = hash[13:token_end_index]
 
         if not token:
             abort(404)
+
+        token_var = token
             
         return jsonify({
             "success": True,
@@ -294,6 +297,7 @@ def create_app(test_config=None):
     def index():
         return render_template('home_page.html'), 200
 
+#Error Handlers----------------------------------------------------
 
     @app.errorhandler(422)
     def unprocessable(error):
@@ -319,11 +323,6 @@ def create_app(test_config=None):
             "message": "bad request"
         }), 400
 
-
-    '''
-    @TODO implement error handler for AuthError
-        error handler should conform to general task above 
-    '''
     @app.errorhandler(AuthError)
     def error_auth(ex):
         response = jsonify(ex.error)
