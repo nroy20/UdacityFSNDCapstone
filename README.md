@@ -4,8 +4,9 @@ This app is a tool that can be used by a casting agency to record and list their
 Link to website: udacity-fsnd-capstone-v1.herokuapp.com
 
 Example login credentials for Casting Assistant role:
-Email: xxfcmcjnxrpawuwgqj@awdrt.com
-Password: user1!!!
+- Email: xxfcmcjnxrpawuwgqj@awdrt.com
+- Password: user1!!!
+
 Project reviewers will be provided with login credentials for other roles as well. These can be used to produce new tokens for testing should the provided ones expire.
 
 Please note that the login function has not been completed yet. It will redirect you back to the home page, and an access token will be available in the URL after login.
