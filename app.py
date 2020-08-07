@@ -7,7 +7,7 @@ import json
 import os
 import requests
 
-token_var = "abc"
+token_var = ""
 
 def create_app(test_config=None):
     app = Flask(__name__, static_folder="templates/stylesheets")
@@ -20,6 +20,9 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
+    @app.route('/actors/list', methods=['GET'])
+    def actor_list():
+        return render_template('actor_list.html', token=token_var)
     @app.route('/actors', methods=['GET'])
     @requires_auth('get:information')
     def list_actors(payload):
@@ -278,7 +281,10 @@ def create_app(test_config=None):
     def get_token():
         body = request.get_json()
         hash = body.get('hash')
-        #TODO: split hash to get token, then shove token into header
+        
+        if not hash:
+            abort(404)
+
         token_end_index = len(hash) - 34
         token = hash[13:token_end_index]
 
@@ -286,6 +292,9 @@ def create_app(test_config=None):
             abort(404)
 
         token_var = token
+
+        if token_var = "":
+            abort(400)
             
         return jsonify({
             "success": True,

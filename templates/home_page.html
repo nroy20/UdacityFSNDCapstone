@@ -9,7 +9,7 @@
         window.onload = function() {
             if(window.location.hash) {
                 hash = location.hash.substr(1);
-                console.log(hash)
+                console.log(hash);
                 fetch('/login-results', {
                     method: "POST",
                     body: JSON.stringify({
@@ -33,16 +33,16 @@
             <button>Log in</button>
         </a>
         <div id="buttons">
-            <a href="actor_list.html">
+            <a href="/actors/list">
                 <button id="b1">List actors</button>
             </a>
-            <a href="movie_list.html">
+            <a href="/movies">
                 <button id="b2">List movies</button>
             </a>
-            <a href="add_actor.html">
+            <a href="/actors/add">
                 <button id="b3">Add actor</button>
             </a>
-            <a href="add_movie.html">
+            <a href="/movies/add">
                 <button id="b4">Add movie</button>
             </a>
             

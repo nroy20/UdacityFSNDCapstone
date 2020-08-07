@@ -117,10 +117,3 @@ def requires_auth(permission=''):
         return wrapper
     return requires_auth_decorator
 
-#it didn't fail there's just nothing there at the callback url
-#but it's ona different port from my app
-#when i set it on my port which is 5000 there was an error idk why
-#auth0 
-# i set it to smth like localhost:8080/login-results 
-#it did work idk how to move forward from there
-#like in my code?

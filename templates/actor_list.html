@@ -1,4 +1,4 @@
-<html>
+<html data-id="{{ token }}">
     <head>
         <title>My Capstone Project</title>
         <link rel="stylesheet" type="text/css" href="../stylesheets/templist.css"/>
@@ -10,6 +10,20 @@
                 window.location = window.location + '#loaded';
                 window.location.reload();
             }
+            var token = document.getElementsByTagName("HTML")[0].getAttribute("data-id");
+            var headers = new Headers();
+            headers.append('Authorization', 'Bearer ' + token)
+            fetch('/actors', {
+                method: "GET",
+                headers: headers
+            })
+            .then(function(response){
+                return response.text();
+            }) 
+            .then(function(jsonResponse) {
+                console.log(token);
+                console.log(jsonResponse);
+            })
         }
     </script>
     <body>
