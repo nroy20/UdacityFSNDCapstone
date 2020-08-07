@@ -11,6 +11,7 @@ import requests
 def create_app(test_config=None):
     app = Flask(__name__, static_folder="templates/stylesheets")
     setup_db(app)
+    global token_var=""
 
     @app.after_request
     def after_request(response):
