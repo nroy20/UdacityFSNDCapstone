@@ -11,7 +11,7 @@ import requests
 def create_app(test_config=None):
     app = Flask(__name__, static_folder="templates/stylesheets")
     setup_db(app)
-    token_var = ""
+    token_var=""
 
     @app.after_request
     def after_request(response):
@@ -291,6 +291,7 @@ def create_app(test_config=None):
         if not token:
             abort(404)
 
+        global token_var
         token_var = token
 
         if token_var == "":
