@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, session, make_response
 from flask_cors import CORS
+from flask_session import Session
 from auth import AuthError, requires_auth
 from functools import wraps
 from models import Actor, Movie, setup_db
@@ -11,8 +12,7 @@ import requests
 def create_app(test_config=None):
     app = Flask(__name__, static_folder="templates/stylesheets")
     setup_db(app)
-    global token_var
-    token_var = ""
+    session['token_var'] = ''
 
     @app.after_request
     def after_request(response):
@@ -23,7 +23,9 @@ def create_app(test_config=None):
 
     @app.route('/actors/list', methods=['GET'])
     def actor_list():
-        return render_template('actor_list.html', token=token_var)
+        if 'token_var' in session:
+            token = session['token_var']
+            return render_template('actor_list.html', token=token)
     @app.route('/actors', methods=['GET'])
     @requires_auth('get:information')
     def list_actors(payload):
@@ -292,8 +294,8 @@ def create_app(test_config=None):
         if not token:
             abort(404)
 
-        global token_var
-        token_var = token
+        session['token_var'] = token
+        token_var = session['token_var']
 
         if token_var == "":
             abort(400)
@@ -303,6 +305,11 @@ def create_app(test_config=None):
             "token": token,
             "token_var": token_var
         })
+
+    @app.route('/logout')
+    def log_out():
+        session.pop('token_var', None)
+        return render_template('home_page.html'), 200
 
     @app.route('/')
     def index():

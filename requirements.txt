@@ -5,6 +5,7 @@ attrs==19.3.0
 Authlib==0.14.3
 awscli==1.18.97
 botocore==1.17.20
+cachelib==0.1.1
 certifi==2020.6.20
 cffi==1.14.1
 chardet==3.0.4
@@ -19,6 +20,7 @@ Flask==1.1.2
 Flask-Cors==3.0.8
 Flask-Migrate==2.5.3
 Flask-Script==2.0.6
+Flask-Session==0.3.2
 Flask-SQLAlchemy==2.4.2
 Flask-Testing==0.8.0
 future==0.18.2
