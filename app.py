@@ -293,7 +293,7 @@ def create_app(test_config=None):
 
         token_var = token
 
-        if token_var = "":
+        if token_var == "":
             abort(400)
             
         return jsonify({
