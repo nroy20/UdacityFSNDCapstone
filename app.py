@@ -298,8 +298,8 @@ def create_app(test_config=None):
             
         return jsonify({
             "success": True,
-            "hash": hash,
-            "token": token
+            "token": token,
+            "token_var": token_var
         })
 
     @app.route('/')
