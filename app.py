@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort, session, make_response
 from flask_cors import CORS
-from flask_session import Session
 from auth import AuthError, requires_auth
 from functools import wraps
 from models import Actor, Movie, setup_db
@@ -12,7 +11,7 @@ import requests
 def create_app(test_config=None):
     app = Flask(__name__, static_folder="templates/stylesheets")
     setup_db(app)
-    session['token_var'] = ''
+    app.secret_key = "hello"#os.getenv('SECRET_KEY')
 
     @app.after_request
     def after_request(response):
@@ -23,8 +22,8 @@ def create_app(test_config=None):
 
     @app.route('/actors/list', methods=['GET'])
     def actor_list():
-        if 'token_var' in session:
-            token = session['token_var']
+        if "token_var" in session:
+            token = session["token_var"]
             return render_template('actor_list.html', token=token)
     @app.route('/actors', methods=['GET'])
     @requires_auth('get:information')
@@ -351,7 +350,6 @@ def create_app(test_config=None):
 
 
 app = create_app()
-app.secret_key = os.getenv('SECRET_KEY')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
