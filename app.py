@@ -25,6 +25,8 @@ def create_app(test_config=None):
         if "token_var" in session:
             token = session["token_var"]
             return render_template('actor_list.html', token=token)
+        else:
+            abort(404)
     @app.route('/actors', methods=['GET'])
     @requires_auth('get:information')
     def list_actors(payload):
